@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter: BIF to EGP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .converter {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="converter">
+        <h2>Currency Converter</h2>
+        <input type="number" id="amount" placeholder="Enter amount" />
+        <select id="fromCurrency">
+            <option value="BIF">Burundian Franc (BIF)</option>
+            <option value="EGP">Egyptian Pound (EGP)</option>
+        </select>
+        <select id="toCurrency">
+            <option value="EGP">Egyptian Pound (EGP)</option>
+            <option value="BIF">Burundian Franc (BIF)</option>
+        </select>
+        <button onclick="convertCurrency()">Convert</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // Exchange rates
+        const exchangeRates = {
+            BIF: 1,
+            EGP: 0.0067 // 1 BIF = 0.0067 EGP
+        };
+
+        function convertCurrency() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+
+            if (isNaN(amount) || amount <= 0) {
+                document.getElementById('result').innerText = 'Please enter a valid amount.';
+                return;
+            }
+
+            // Convert amount to BIF first
+            const amountInBIF = amount / exchangeRates[fromCurrency];
+
+            // Convert BIF to the target currency
+            const convertedAmount = amountInBIF * exchangeRates[toCurrency];
+
+            document.getElementById('result').innerText = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+        }
+    </script>
+</body>
+</html>
