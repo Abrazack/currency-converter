@@ -11,7 +11,7 @@
         select, input, button { margin: 10px; padding: 10px; width: calc(100% - 22px); border-radius: 5px; border: 1px solid #ccc; }
         button { background-color: #ffcc00; color: black; border: none; cursor: pointer; font-weight: bold; }
         button:hover { background-color: #ff9900; }
-        .settings-menu { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #004080; padding: 20px; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border-radius: 10px; color: white; }
+        .settings-menu { display: none; position: fixed; top:50%; left:50%; transform: translate(-50%, -50%); background: #004080; padding: 20px; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border-radius: 10px; color: white; }
         .settings-menu button { width: auto; }
         select, input { background: white; color: black; }
         img.logo { width: 100px; display: block; margin: 0 auto 20px; }
@@ -19,10 +19,10 @@
 </head>
 <body>
     <div class="container">
-        <img src="https://raw.githubusercontent.com/Abrazack/currency-converter/main/logo.png" alt="Logo" class="logo">
+        <img src="MHappyStore Logo.png" alt="Logo" class="logo">
         <h1 id="title">Currency Converter</h1>
         
-        <label for="originCurrency">Niko na:</label>
+        <label for="originCurrency" id="originLabel">Niko na:</label>
         <select id="originCurrency">
             <option value="USD">USD</option>
             <option value="EGP">EGP</option>
@@ -32,7 +32,7 @@
         <label for="amount" id="amountLabel">Kiasi:</label>
         <input type="number" id="amount" placeholder="Enter amount">
         
-        <label for="currency">Nataka:</label>
+        <label for="currency" id="targetLabel">Nataka:</label>
         <select id="currency">
             <option value="EGP">EGP</option>
             <option value="BIF">BIF</option>
@@ -94,6 +94,8 @@
             document.getElementById("title").innerText = translations[lang].title;
             document.getElementById("amountLabel").innerText = translations[lang].amountLabel;
             document.getElementById("convertButton").innerText = translations[lang].convertButton;
+            document.getElementById("originLabel").innerText = translations[lang].originLabel;
+            document.getElementById("targetLabel").innerText = translations[lang].targetLabel;
         }
         
         function toggleSettings() {
