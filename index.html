@@ -3,86 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Converter: BIF to EGP</title>
+    <title>Currency Converter</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .converter {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        input, select, button {
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #003366; color: white; margin: 0; padding: 0; }
+        .container { margin: 50px auto; padding: 20px; background: #004080; width: 90%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
+        h1 { color: white; }
+        select, input, button { margin: 10px; padding: 10px; width: calc(100% - 22px); border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #ffcc00; color: black; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #ff9900; }
+        .settings-menu { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #004080; padding: 20px; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border-radius: 10px; color: white; }
+        .settings-menu button { width: auto; }
+        select, input { background: white; color: black; }
     </style>
 </head>
 <body>
-    <div class="converter">
-        <h2>Currency Converter</h2>
-        <input type="number" id="amount" placeholder="Enter amount" />
-        <select id="fromCurrency">
-            <option value="BIF">Burundian Franc (BIF)</option>
-            <option value="EGP">Egyptian Pound (EGP)</option>
+    <div class="container">
+        <h1 id="title">Currency Converter</h1>
+        
+        <label for="originCurrency">Niko na:</label>
+        <select id="originCurrency">
+            <option value="USD">USD</option>
+            <option value="EGP">EGP</option>
+            <option value="BIF">BIF</option>
         </select>
-        <select id="toCurrency">
-            <option value="EGP">Egyptian Pound (EGP)</option>
-            <option value="BIF">Burundian Franc (BIF)</option>
+        
+        <label for="amount" id="amountLabel">Kiasi:</label>
+        <input type="number" id="amount" placeholder="Enter amount">
+        
+        <label for="currency">Nataka:</label>
+        <select id="currency">
+            <option value="EGP">EGP</option>
+            <option value="BIF">BIF</option>
+            <option value="USD">USD</option>
         </select>
-        <button onclick="convertCurrency()">Convert</button>
-        <div class="result" id="result"></div>
+        
+        <button onclick="convertCurrency()" id="convertButton">Convert</button>
+        
+        <h2 id="result">Result: </h2>
+        
+        <label for="language">Language:</label>
+        <select id="language" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="sw">Swahili</option>
+            <option value="fr">French</option>
+        </select>
+        
+        <button onclick="toggleSettings()">⚙️ Settings</button>
     </div>
-
+    
+    <div class="settings-menu" id="settingsMenu">
+        <h3>Adjust Exchange Rate</h3>
+        <label for="usdToEgp">1 USD to EGP:</label>
+        <input type="number" id="usdToEgp" value="50.50">
+        
+        <label for="usdToBif">1 USD to BIF:</label>
+        <input type="number" id="usdToBif" value="7550">
+        
+        <button onclick="saveSettings()">Save</button>
+        <button onclick="toggleSettings()">Close</button>
+    </div>
+    
     <script>
-        // Exchange rates
-        const exchangeRates = {
-            BIF: 1,
-            EGP: 0.0067 // 1 BIF = 0.0067 EGP
+        let exchangeRates = {
+            "USD": 1,
+            "EGP": 50.50,
+            "BIF": 7550
         };
 
         function convertCurrency() {
-            const amount = parseFloat(document.getElementById('amount').value);
-            const fromCurrency = document.getElementById('fromCurrency').value;
-            const toCurrency = document.getElementById('toCurrency').value;
-
-            if (isNaN(amount) || amount <= 0) {
-                document.getElementById('result').innerText = 'Please enter a valid amount.';
-                return;
-            }
-
-            // Convert amount to BIF first
-            const amountInBIF = amount / exchangeRates[fromCurrency];
-
-            // Convert BIF to the target currency
-            const convertedAmount = amountInBIF * exchangeRates[toCurrency];
-
-            document.getElementById('result').innerText = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+            let amount = parseFloat(document.getElementById("amount").value);
+            let originCurrency = document.getElementById("originCurrency").value;
+            let targetCurrency = document.getElementById("currency").value;
+            
+            let amountInUsd = amount / exchangeRates[originCurrency];
+            let result = amountInUsd * exchangeRates[targetCurrency];
+            
+            document.getElementById("result").innerText = "Result: " + result.toFixed(2) + " " + targetCurrency;
+        }
+        
+        function changeLanguage() {
+            let lang = document.getElementById("language").value;
+            let translations = {
+                "en": { "title": "Currency Converter", "amountLabel": "Amount:", "convertButton": "Convert", "originLabel": "I have:", "targetLabel": "I want:" },
+                "sw": { "title": "Kubadilisha Sarafu", "amountLabel": "Kiasi:", "convertButton": "Badilisha", "originLabel": "Niko na:", "targetLabel": "Nataka:" },
+                "fr": { "title": "Convertisseur de Devises", "amountLabel": "Montant:", "convertButton": "Convertir", "originLabel": "J'ai:", "targetLabel": "Je veux:" }
+            };
+            
+            document.getElementById("title").innerText = translations[lang].title;
+            document.getElementById("amountLabel").innerText = translations[lang].amountLabel;
+            document.getElementById("convertButton").innerText = translations[lang].convertButton;
+        }
+        
+        function toggleSettings() {
+            let menu = document.getElementById("settingsMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+        
+        function saveSettings() {
+            exchangeRates["EGP"] = parseFloat(document.getElementById("usdToEgp").value);
+            exchangeRates["BIF"] = parseFloat(document.getElementById("usdToBif").value);
+            toggleSettings();
         }
     </script>
 </body>
